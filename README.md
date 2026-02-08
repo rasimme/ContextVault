@@ -1,6 +1,17 @@
 # Memory Management for OpenClaw
 
-A structured approach to persistent memory in OpenClaw — keeping your agent's knowledge organized, maintained, and efficient over time.
+> **v1.0.0** — A structured approach to persistent memory in OpenClaw.
+
+Keeping your agent's knowledge organized, maintained, and efficient over time.
+
+### Components
+
+| Component | Type | Description |
+|-----------|------|-------------|
+| Session Handoff | Hook | Session context persistence across /new and compaction |
+| Memory Maintainer | Cron | Automated MEMORY.md curation every 3 days |
+| Workspace Housekeeping | Skill | File size monitoring + cleanup guide |
+| Workspace File Guide | Docs | What belongs where (AGENTS.md, SOUL.md, etc.) |
 
 ## The Challenge
 
@@ -131,6 +142,16 @@ Quick reference for what belongs where:
 4. Set up the memory-maintainer cron job (see cron README)
 5. Create your MEMORY.md if it doesn't exist
 6. Add a housekeeping reference to your AGENTS.md
+
+## Changelog
+
+### v1.0.0 (2026-02-08)
+- Initial release
+- 3-layer memory model (short-term → long-term → archive)
+- Memory maintainer cron job (every 3 days, automated MEMORY.md curation)
+- Workspace housekeeping skill with file size monitoring
+- Session handoff hook (renamed from simme-memory v3.1.0)
+- Workspace file guide (AGENTS.md, SOUL.md, TOOLS.md, MEMORY.md sizing and content rules)
 
 ## License
 
