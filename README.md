@@ -8,10 +8,9 @@ Keeping your agent's knowledge organized, maintained, and efficient over time.
 
 | Component | Type | Version | Description |
 |-----------|------|---------|-------------|
-| Session Handoff | Hook | v1.0.0 | Session context persistence across /new and compaction |
-| Memory Maintainer | Cron | v1.1.0 | Automated MEMORY.md curation every 3 days |
-| Workspace Housekeeping | Skill | v1.1.0 | File size monitoring + cleanup guide |
-| Workspace File Guide | Docs | v1.1.0 | What belongs where (AGENTS.md, SOUL.md, etc.) |
+| [Session Handoff](./hooks/session-handoff/) | Hook | v1.1.0 | Session context persistence across /new and compaction |
+| [Memory Maintainer](./cron/memory-maintainer/) | Cron | v1.1.0 | Automated MEMORY.md curation every 3 days |
+| [Workspace Housekeeping](./skills/workspace-housekeeping/) | Skill | v1.1.0 | File size monitoring + cleanup guide |
 
 ## The Challenge
 
