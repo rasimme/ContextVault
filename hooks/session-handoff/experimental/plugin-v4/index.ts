@@ -1,5 +1,6 @@
 /**
- * Simme Memory Plugin v4
+ * Session Handoff Plugin v4 (Experimental)
+ * (formerly Simme Memory Plugin v4)
  * 
  * Automatic session context management with LLM summarization:
  * - On /new: LLM summarizes the session → saves to SESSION-STATE.md

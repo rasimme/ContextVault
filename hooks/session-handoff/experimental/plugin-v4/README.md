@@ -1,4 +1,4 @@
-# Simme Memory Plugin v4 (Experimental)
+# Session Handoff Plugin v4 (Experimental)
 
 ⚠️ **This plugin registers a `before_compaction` hook that OpenClaw doesn't currently trigger.**
 
@@ -12,21 +12,21 @@
 
 ## Why Experimental?
 
-OpenClaw's Plugin SDK defines `before_compaction` as a valid hook type, but the compaction pipeline doesn't call it yet. This plugin is "future-ready" - it will work automatically once OpenClaw wires up the hook.
+OpenClaw's Plugin SDK defines `before_compaction` as a valid hook type, but the compaction pipeline doesn't call it yet. This plugin is "future-ready" — it will work automatically once OpenClaw wires up the hook.
 
 ## Current Workaround
 
-Use the Memory Flush prompt instead (see main README).
+Use the Memory Flush prompt instead (see [main README](../../README.md)).
 
 ## Installation (when OpenClaw supports before_compaction)
 
 ```bash
-cp -r . ~/.openclaw/extensions/simme-memory/
+cp -r . ~/.openclaw/extensions/session-handoff/
 openclaw gateway restart
 ```
 
 ## Files
 
-- `index.ts` - Plugin implementation
-- `openclaw.plugin.json` - Plugin manifest
-- `package.json` - NPM metadata
+- `index.ts` — Plugin implementation
+- `openclaw.plugin.json` — Plugin manifest
+- `package.json` — NPM metadata

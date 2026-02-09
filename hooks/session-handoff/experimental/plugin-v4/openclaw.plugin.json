@@ -1,7 +1,7 @@
 {
-  "id": "simme-memory",
-  "name": "Simme Memory",
-  "version": "4.0.0",
+  "id": "session-handoff",
+  "name": "Session Handoff",
+  "version": "4.0.0-experimental",
   "description": "Automatic session context management with LLM summarization. Saves SESSION-STATE.md on /new AND before compaction.",
   "author": "Simeon",
   "homepage": "https://github.com/rasimme/openclaw-skills",
@@ -26,7 +26,7 @@
     }
   },
   "uiHints": {
-    "enabled": { "label": "Enable Simme Memory" },
+    "enabled": { "label": "Enable Session Handoff" },
     "model": { "label": "Summarization Model", "placeholder": "anthropic/claude-haiku-4-5" },
     "debug": { "label": "Debug Logging" }
   }

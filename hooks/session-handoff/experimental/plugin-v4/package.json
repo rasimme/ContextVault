@@ -1,12 +1,12 @@
 {
-  "name": "simme-memory",
-  "version": "4.0.0",
-  "description": "Automatic session context management with LLM summarization. Saves SESSION-STATE.md on /new AND before compaction.",
+  "name": "session-handoff-plugin",
+  "version": "4.0.0-experimental",
+  "description": "Session handoff plugin with before_compaction support (experimental).",
   "keywords": [
     "memory",
     "openclaw",
     "plugin",
-    "session-state",
+    "session-handoff",
     "context-management",
     "compaction"
   ],

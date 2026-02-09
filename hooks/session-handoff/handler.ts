@@ -1,5 +1,6 @@
 /**
- * Simme Memory Hook v3
+ * Session Handoff Hook v1.1.0
+ * (formerly Simme Memory v3)
  * 
  * Automatic session context management with LLM summarization:
  * - On /new: LLM summarizes the session → saves to SESSION-STATE.md
