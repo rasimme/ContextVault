@@ -1,5 +1,7 @@
 # Workspace Housekeeping Skill
 
+> **v1.1.0**
+
 On-demand cleanup guide for workspace MD files. Loaded only when needed — zero token overhead in daily use.
 
 ## What it does

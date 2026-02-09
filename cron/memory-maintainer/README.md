@@ -1,5 +1,7 @@
 # Memory Maintainer (Cron Job)
 
+> **v1.1.0**
+
 Automated curation of MEMORY.md — runs every 3 days, keeps long-term memory fresh and under control.
 
 ## What it does

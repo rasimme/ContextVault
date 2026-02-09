@@ -1,5 +1,7 @@
 # Session Handoff Hook
 
+> **v1.0.0**
+
 Preserves active session context across `/new` commands and compaction events.
 
 ## What it does
