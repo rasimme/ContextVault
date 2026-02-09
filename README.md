@@ -1,6 +1,6 @@
 # Memory Management for OpenClaw
 
-> **v1.0.0** — A structured approach to persistent memory in OpenClaw.
+> **v1.1.0** — A structured approach to persistent memory in OpenClaw.
 
 Keeping your agent's knowledge organized, maintained, and efficient over time.
 
@@ -126,13 +126,24 @@ The user stays in control: the maintainer curates autonomously, but housekeeping
 
 Quick reference for what belongs where:
 
-**AGENTS.md** — Operating manual. Rules, safety, workflows. NOT project details, NOT tool configs.
+**AGENTS.md** — Operating manual. Rules, safety, workflows. NOT project details, NOT tool configs. **Write in English** (better instruction adherence).
 
-**SOUL.md** — Core personality. Character traits, values, boundaries. NOT behavior rules, NOT communication tips.
+**SOUL.md** — Core personality. Character traits, values, boundaries. NOT behavior rules, NOT communication tips. **Write in your native language** (personality lives in its language).
 
-**TOOLS.md** — Quick reference for available tools. Short commands, NOT detailed hardware configs (those go in skills).
+**TOOLS.md** — Quick reference for available tools. Short commands, NOT detailed hardware configs (those go in skills). **Write in English.**
 
-**MEMORY.md** — Curated long-term knowledge. People, preferences, projects, decisions. NOT daily logs, NOT debugging details.
+**MEMORY.md** — Curated long-term knowledge. People, preferences, projects, decisions. NOT daily logs, NOT debugging details. **Write in your native language.**
+
+### Language Policy
+
+Models follow English instructions ~20-30% better than non-English. Recommendation:
+- **English:** AGENTS.md, TOOLS.md (instructions the model must follow)
+- **Native language:** SOUL.md, USER.md, IDENTITY.md, MEMORY.md (personality and context)
+- **Agent replies:** In the user's language (configured in SOUL.md or AGENTS.md)
+
+### Protected Sections
+
+The housekeeping skill defines which sections in AGENTS.md are **locked** (never remove) vs **adjustable** (can be refined). This prevents cleanup from accidentally removing critical rules like safety policies or response style guidelines. See the [housekeeping skill](skills/workspace-housekeeping/SKILL.md) for details.
 
 ## Setup
 
@@ -144,6 +155,14 @@ Quick reference for what belongs where:
 6. Add a housekeeping reference to your AGENTS.md
 
 ## Changelog
+
+### v1.1.0 (2026-02-09)
+- Housekeeping skill rewritten in English (better model instruction adherence)
+- Added language policy: English for instruction files, native language for personality/context
+- Added protected vs adjustable sections (prevents accidental deletion of critical rules)
+- Added response style guidance (brevity rules to reduce token usage)
+- Memory maintainer now references housekeeping skill in warnings
+- Cron warning message updated with skill load hint
 
 ### v1.0.0 (2026-02-08)
 - Initial release

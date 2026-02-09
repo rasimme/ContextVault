@@ -1,127 +1,122 @@
 # Workspace Housekeeping Skill
 
-Anleitung zum Aufräumen und Pflegen der Workspace MD-Files.
-Wird geladen wenn der Memory Maintainer eine Warnung gibt oder ein manuelles Review ansteht.
+Instructions for maintaining workspace MD files.
+Load when memory-maintainer warns about file sizes or for manual review.
 
 ---
 
-## File-Architektur
+## Language Policy
 
-| File | Zweck | Max Größe | Gepflegt durch |
-|------|-------|-----------|---------------|
-| AGENTS.md | WIE ich arbeite (Regeln, Verhalten) | 4KB | Manuell (Simeon + Agent) |
-| SOUL.md | WER ich bin (Kern-Persönlichkeit) | 2KB | Selten, nur bei echter Evolution |
-| USER.md | WEM ich helfe (Simeons Basics) | 1KB | Selten |
-| IDENTITY.md | Quick-Steckbrief | 0.5KB | Selten |
-| TOOLS.md | WAS ich kann (Tool-Übersicht) | 3KB | Bei neuen/entfernten Tools |
-| MEMORY.md | WAS ich weiß (Long-term) | 10KB | Cron Job (memory-maintainer) |
-| HEARTBEAT.md | Periodische Tasks | 1KB | Bei Bedarf |
+- **AGENTS.md, TOOLS.md** → English (model instructions, better adherence)
+- **SOUL.md** → German (personality lives in its language)
+- **USER.md, IDENTITY.md** → German (personal context)
+- **MEMORY.md** → German (facts about German-speaking user)
+- **Agent replies** → German (unless user asks otherwise)
 
-## Was gehört wohin?
+## File Architecture
 
-### AGENTS.md (Regeln & Verhalten)
-✅ Rein:
-- Sicherheitsregeln (Safety, No-Go Zones)
-- Kommunikationsregeln (Group Chats, Platform-Formatting)
-- Workflow-Anweisungen (Voice Messages, Progress Updates)
-- File-Architektur Übersicht
+| File | Purpose | Max Size | Maintained by |
+|------|---------|----------|---------------|
+| AGENTS.md | HOW I work (rules, behavior) | 4KB | Manual (user + agent) |
+| SOUL.md | WHO I am (core personality) | 2KB | Rare, only true evolution |
+| USER.md | WHO I help (user basics) | 1KB | Rare, user-driven |
+| IDENTITY.md | Quick profile card | 0.5KB | Rare, user-driven |
+| TOOLS.md | WHAT I can do (tool reference) | 3KB | When tools change |
+| MEMORY.md | WHAT I know (long-term) | 10KB | Cron (memory-maintainer) |
+| HEARTBEAT.md | Periodic task checklist | 1KB | As needed |
 
-❌ Raus (auslagern!):
-- Technische Details → TOOLS.md oder Skill
-- Projekt-Infos → MEMORY.md
-- Tool-Befehle → TOOLS.md
-- Persönlichkeit → SOUL.md
-- Hardware/IPs → jeweiliger Skill
+## Protected Sections (NEVER remove or change intent)
 
-### SOUL.md (Persönlichkeit)
-✅ Rein:
-- Kern-Charakter (Ehrlichkeit, Humor, Loyalität, Ehrgeiz)
-- Grundlegende Grenzen
-- Sprache
+### AGENTS.md — these sections are LOCKED:
+- **Response Style** — Brevity rules (2-4 sentences default)
+- **Safety** — Security rules, trash > rm
+- **No-Go Zones** — Moltbook isolation
+- **Reminders** — sessionTarget: isolated + delivery config
 
-❌ Raus:
-- Verhaltensregeln → AGENTS.md
-- Ton-nach-Kontext Tabellen → AGENTS.md
-- Kommunikations-Tipps → AGENTS.md
-- Wissen über Simeon → MEMORY.md
+### AGENTS.md — these sections are ADJUSTABLE:
+- Heartbeat schedule/details
+- Platform-Formatting specifics
+- Commands list
+- File architecture table
+- Group Chat rules (can refine, not remove)
+- Progress Updates format
+- Voice Messages instructions
 
-### TOOLS.md (Tool-Übersicht)
-✅ Rein:
-- Kurze Auflistung aller verfügbaren Tools mit Commands
-- Quick-Reference für häufig genutzte Befehle
-- Lampen-/Szenen-Namen die man im Alltag braucht
+### SOUL.md — PROTECTED
+- Only the agent may evolve this file, and MUST inform user
+- Housekeeper may trim if >2KB, but never change personality traits
+- Core values (honesty, humor, loyalty, ambition) are permanent
 
-❌ Raus:
-- Hardware-Details (IPs, Ports, MACs) → jeweiliger Skill
-- Ausführliche Anleitungen → jeweiliger Skill
-- Setup-Instruktionen → jeweiliger Skill
+### USER.md / IDENTITY.md — READ-ONLY for housekeeper
+- Only user changes these
 
-### MEMORY.md (Langzeitwissen)
-✅ Rein:
-- Fakten über Simeon (Präferenzen, Background, Interessen)
-- Menschen und Beziehungen
-- Aktive Projekte und deren Status
-- Architektur-Entscheidungen
-- Wichtige Learnings
+### TOOLS.md — FULLY ADJUSTABLE
+- Add/remove tools as they change
+- Keep as quick-reference, no detailed guides
 
-❌ Raus:
-- Tagesgeschäft → Daily Files
-- Technische Debugging-Details → Daily Files
-- Erledigte Einmal-Tasks → Daily Files
-- Setup-Logs → Daily Files
+### MEMORY.md — MANAGED BY CRON
+- Housekeeper only checks size, does not edit content
+- memory-maintainer cron handles curation
 
-## Aufräum-Prozess
+## What Goes Where
 
-### 1. Analyse
-```
-Lies die betroffene Datei komplett.
-Prüfe die aktuelle Größe.
-Identifiziere Einträge die nicht hierhin gehören.
-```
+### AGENTS.md (Rules & Behavior)
+✅ In: Safety, communication rules, workflow instructions, response style
+❌ Out: Technical details → TOOLS.md, project info → MEMORY.md, 
+   tool commands → TOOLS.md, personality → SOUL.md
 
-### 2. Vorschlag
-```
-Zeige Simeon:
-- Was rausfliegen soll (mit Begründung)
-- Wohin es stattdessen gehört
-- Neue Größe nach Aufräumen
-```
+### SOUL.md (Personality)
+✅ In: Core character, boundaries, language preference
+❌ Out: Behavior rules → AGENTS.md, knowledge → MEMORY.md
 
-### 3. Umsetzung (nur nach Bestätigung!)
-```
-Verschiebe Inhalte in die richtigen Files.
-Kürze die Datei.
-Prüfe dass keine Information verloren geht.
-```
+### TOOLS.md (Tool Reference)
+✅ In: Available tools with commands, scene names, quick reference
+❌ Out: Hardware details → skill files, setup guides → skill files
 
-## Größen-Warnschwellen
+### MEMORY.md (Long-term Knowledge)
+✅ In: User facts, people, projects, architecture decisions
+❌ Out: Daily tasks → daily files, debug logs → daily files
 
-| File | Gelb (Hinweis) | Rot (Aufräumen nötig) |
-|------|---------------|----------------------|
+## Cleanup Process
+
+### 1. Analyze
+- Read the file, check size
+- Identify entries that don't belong
+
+### 2. Propose (ALWAYS show user first!)
+- What to remove (with reason)
+- Where it moves to
+- New size after cleanup
+
+### 3. Execute (only after user confirmation!)
+- Move content to correct files
+- Trim the file
+- Verify no information lost
+
+## Size Thresholds
+
+| File | Yellow (notice) | Red (cleanup needed) |
+|------|----------------|---------------------|
 | AGENTS.md | >3.5KB | >4KB |
 | SOUL.md | >1.5KB | >2KB |
 | TOOLS.md | >2.5KB | >3KB |
 | MEMORY.md | >8KB | >10KB |
 
-## Häufige Fehler
+## Common Mistakes
 
-1. **"Pack ich schnell in AGENTS.md"** — Ist es eine Regel? Wenn nein → woanders hin
-2. **Tool-Details in AGENTS.md** — Befehle, IPs, Configs → TOOLS.md oder Skill
-3. **Projekt-Updates in AGENTS.md** — Status-Infos → MEMORY.md
-4. **SOUL.md als Regelwerk** — Ton-Tabellen, Workflows → AGENTS.md
-5. **MEMORY.md mit Setup-Logs** — Debugging-Details → bleiben in Daily Files
+1. Dumping everything in AGENTS.md — Is it a rule? If no → elsewhere
+2. Tool details in AGENTS.md → TOOLS.md or skill
+3. Project updates in AGENTS.md → MEMORY.md
+4. SOUL.md as rulebook → AGENTS.md
+5. Setup logs in MEMORY.md → stay in daily files
 
-## Checkliste für Review
+## Review Checklist
 
-- [ ] AGENTS.md: Nur Regeln & Verhalten? Unter 4KB?
-- [ ] SOUL.md: Nur Kern-Persönlichkeit? Unter 2KB?
-- [ ] TOOLS.md: Nur Quick-Reference? Unter 3KB?
-- [ ] MEMORY.md: Nur Langzeit-Fakten? Unter 10KB?
-- [ ] Keine Duplikate zwischen den Files?
-- [ ] Keine veralteten Einträge?
-- [ ] Technische Details in Skills statt Workspace-Files?
-
----
-
-*Erstellt: 2026-02-08*
-*Diesen Skill laden wenn eine Housekeeping-Warnung kommt oder ein manuelles Review ansteht.*
+- [ ] AGENTS.md: Only rules & behavior? Under 4KB? English?
+- [ ] SOUL.md: Only core personality? Under 2KB?
+- [ ] TOOLS.md: Only quick-reference? Under 3KB? English?
+- [ ] MEMORY.md: Only long-term facts? Under 10KB?
+- [ ] No duplicates between files?
+- [ ] No outdated entries?
+- [ ] Technical details in skills, not workspace files?
+- [ ] Protected sections intact?
