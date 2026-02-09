@@ -1,0 +1,33 @@
+{
+  "id": "simme-memory",
+  "name": "Simme Memory",
+  "version": "4.0.0",
+  "description": "Automatic session context management with LLM summarization. Saves SESSION-STATE.md on /new AND before compaction.",
+  "author": "Simeon",
+  "homepage": "https://github.com/rasimme/openclaw-skills",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "model": {
+        "type": "string",
+        "default": "anthropic/claude-haiku-4-5",
+        "description": "Model to use for summarization"
+      },
+      "debug": {
+        "type": "boolean",
+        "default": false,
+        "description": "Enable verbose logging"
+      }
+    }
+  },
+  "uiHints": {
+    "enabled": { "label": "Enable Simme Memory" },
+    "model": { "label": "Summarization Model", "placeholder": "anthropic/claude-haiku-4-5" },
+    "debug": { "label": "Debug Logging" }
+  }
+}

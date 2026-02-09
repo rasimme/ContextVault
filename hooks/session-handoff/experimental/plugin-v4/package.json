@@ -1,0 +1,22 @@
+{
+  "name": "simme-memory",
+  "version": "4.0.0",
+  "description": "Automatic session context management with LLM summarization. Saves SESSION-STATE.md on /new AND before compaction.",
+  "keywords": [
+    "memory",
+    "openclaw",
+    "plugin",
+    "session-state",
+    "context-management",
+    "compaction"
+  ],
+  "author": "Simeon",
+  "license": "MIT",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rasimme/openclaw-skills"
+  }
+}

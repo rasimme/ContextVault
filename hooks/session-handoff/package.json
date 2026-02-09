@@ -1,0 +1,29 @@
+{
+  "name": "simme-memory",
+  "version": "3.1.0",
+  "description": "Lightweight working memory system for OpenClaw. SESSION-STATE.md as 'RAM' + automatic context persistence via hook.",
+  "keywords": [
+    "memory",
+    "openclaw",
+    "ai-agent",
+    "working-memory",
+    "session-state",
+    "context-management",
+    "hook"
+  ],
+  "author": "Simeon",
+  "license": "MIT",
+  "openclaw": {
+    "hooks": ["./hooks"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rasimme/openclaw-skills"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "templates/",
+    "hooks/"
+  ]
+}

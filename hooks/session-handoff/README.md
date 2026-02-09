@@ -1,6 +1,6 @@
 # Session Handoff Hook
 
-> **v1.0.0**
+> **v1.1.0** (formerly "Simme Memory" v3.0.0)
 
 Preserves active session context across `/new` commands and compaction events.
 
@@ -21,42 +21,51 @@ When a session ends (via `/new`) or gets compacted, the hook asks an LLM to summ
 ```markdown
 # SESSION-STATE.md
 
+> Previous session context. Continue where you left off.
+
 ## Current Task
-What the agent was working on
-
 ## Key Context
-Important context for the current task
-
 ## Pending Actions
-What still needs to be done
-
 ## Blockers
-What's blocking progress
 ```
 
-## Setup
+## Installation
 
-1. Copy this hook to `~/.openclaw/hooks/session-handoff/`
-2. Enable in your OpenClaw config:
+1. Copy the hook to your OpenClaw hooks directory:
 
-```json5
+```bash
+cp -r hooks/session-handoff ~/.openclaw/hooks/
+```
+
+2. Enable in your OpenClaw config (`openclaw.json`):
+
+```json
 {
-  hooks: {
-    internal: {
-      enabled: true,
-      entries: {
-        "session-handoff": { enabled: true }
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "session-handoff": {
+          "enabled": true
+        }
       }
     }
   }
 }
 ```
 
-3. The hook uses a lightweight model (Haiku-class) for summarization (~$0.001 per call)
+3. The hook compiles `handler.ts` → `handler.js` automatically on first run.
 
-## How it works
+## Files
 
-- Uses a fixed worker session key to avoid context buildup
-- Resolves workspace directory from agent config
-- Writes SESSION-STATE.md to the agent's workspace root
-- The file is automatically picked up as workspace context by OpenClaw
+| File | Purpose |
+|------|---------|
+| `handler.ts` | Hook source code (TypeScript) |
+| `HOOK.md` | Hook metadata for OpenClaw |
+| `package.json` | Dependencies |
+| `templates/` | SESSION-STATE.md template |
+| `experimental/` | Experimental features |
+
+## Part of
+
+[Memory Management for OpenClaw](../../README.md) — 3-layer memory architecture.
