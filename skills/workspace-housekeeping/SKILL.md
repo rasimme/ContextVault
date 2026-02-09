@@ -1,3 +1,8 @@
+---
+name: workspace-housekeeping
+description: Guidelines for maintaining workspace MD files (AGENTS.md, SOUL.md, TOOLS.md, MEMORY.md). Use when file sizes exceed limits or for manual workspace cleanup and review.
+---
+
 # Workspace Housekeeping Skill
 
 Instructions for maintaining workspace MD files.
