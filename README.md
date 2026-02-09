@@ -11,6 +11,7 @@ Keeping your agent's knowledge organized, maintained, and efficient over time.
 | [Session Handoff](./hooks/session-handoff/) | Hook | v1.1.0 | Session context persistence across /new and compaction |
 | [Memory Maintainer](./cron/memory-maintainer/) | Cron | v1.1.0 | Automated MEMORY.md curation every 3 days |
 | [Workspace Housekeeping](./skills/workspace-housekeeping/) | Skill | v1.1.0 | File size monitoring + cleanup guide |
+| [Memory Flush](./config/memory-flush.md) | Config | v1.1.0 | Pre-compaction state persistence (openclaw.json) |
 
 ## The Challenge
 
