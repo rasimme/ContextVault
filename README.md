@@ -1,8 +1,8 @@
-# OpenClaw Memory Management
+# ContextVault
 
-[![GitHub](https://img.shields.io/badge/GitHub-openclaw--memory-blue?logo=github)](https://github.com/rasimme/openclaw-memory)
+[![GitHub](https://img.shields.io/badge/GitHub-ContextVault-blue?logo=github)](https://github.com/rasimme/ContextVault)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v1.1.0-orange.svg)](https://github.com/rasimme/openclaw-memory/releases)
+[![Version](https://img.shields.io/badge/version-v1.1.0-orange.svg)](https://github.com/rasimme/ContextVault/releases)
 
 > **Advanced memory management system for OpenClaw agents.**
 
@@ -25,7 +25,7 @@ Structured approach to persistent memory with session handoff, automated curatio
 ```bash
 # 1. Clone into your OpenClaw workspace
 cd ~/.openclaw/workspace
-git clone https://github.com/rasimme/openclaw-memory.git memory-system
+git clone https://github.com/rasimme/ContextVault.git memory-system
 
 # 2. Install components
 # Session Handoff Hook
@@ -55,7 +55,7 @@ openclaw gateway restart
 
 ## Related Projects
 
-- **[openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode)** — Project management with Kanban dashboard (uses memory system for session persistence)
+- **[FlowBoard](https://github.com/rasimme/FlowBoard)** — Project management with Kanban dashboard (uses memory system for session persistence)
 - **[openclaw-skills](https://github.com/rasimme/openclaw-skills)** — Collection of OpenClaw skills and plugins
 
 ---
@@ -113,7 +113,7 @@ Preserves active task context when you start a new session (`/new` command or se
 - Restores context seamlessly
 
 **Integration with Project Mode:**
-If you use [openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode), the hook writes project-aware context (active tasks, decisions, next steps).
+If you use [FlowBoard](https://github.com/rasimme/FlowBoard), the hook writes project-aware context (active tasks, decisions, next steps).
 
 ---
 
@@ -238,7 +238,7 @@ Agent, load the workspace-housekeeping skill and help me clean up AGENTS.md
 
 ## Integration with Project Mode
 
-If you use [openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode), this system enhances it:
+If you use [FlowBoard](https://github.com/rasimme/FlowBoard), this system enhances it:
 
 **Session Handoff:**
 - Writes PROJECT.md updates before `/new`
