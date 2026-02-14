@@ -1,17 +1,64 @@
-# Memory Management for OpenClaw
+# OpenClaw Memory Management
 
-> **v1.1.0** — A structured approach to persistent memory in OpenClaw.
+[![GitHub](https://img.shields.io/badge/GitHub-openclaw--memory-blue?logo=github)](https://github.com/rasimme/openclaw-memory)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-v1.1.0-orange.svg)](https://github.com/rasimme/openclaw-memory/releases)
 
-Keeping your agent's knowledge organized, maintained, and efficient over time.
+> **Advanced memory management system for OpenClaw agents.**
 
-### Components
+Structured approach to persistent memory with session handoff, automated curation, and workspace housekeeping.
 
-| Component | Type | Version | Description |
-|-----------|------|---------|-------------|
-| [Session Handoff](./hooks/session-handoff/) | Hook | v1.1.0 | Session context persistence across /new and compaction |
-| [Memory Maintainer](./cron/memory-maintainer/) | Cron | v1.1.0 | Automated MEMORY.md curation every 3 days |
-| [Workspace Housekeeping](./skills/workspace-housekeeping/) | Skill | v1.1.0 | File size monitoring + cleanup guide |
-| [Memory Flush](./hooks/session-handoff/memory-flush.md) | Config | v1.1.0 | Pre-compaction state persistence (openclaw.json) |
+---
+
+## Features
+
+- 🔄 **Session Persistence** — Context survives `/new`, compaction, and gateway restarts
+- 🧹 **Automated Curation** — Memory Maintainer runs every 3 days to keep MEMORY.md fresh
+- 📊 **Workspace Monitoring** — File size tracking with cleanup guidance
+- 💾 **Memory Flush Integration** — Pre-compaction state persistence
+- 🎯 **Zero Maintenance** — Self-maintaining via hooks and cron jobs
+
+---
+
+## Quick Start
+
+```bash
+# 1. Clone into your OpenClaw workspace
+cd ~/.openclaw/workspace
+git clone https://github.com/rasimme/openclaw-memory.git memory-system
+
+# 2. Install components
+# Session Handoff Hook
+cp memory-system/hooks/session-handoff/session-handoff.mjs hooks/
+
+# Memory Maintainer Cron
+# (Use cron tool via OpenClaw CLI or add via gateway config)
+
+# Workspace Housekeeping Skill
+cp -r memory-system/skills/workspace-housekeeping ~/.openclaw/skills/
+
+# 3. Configure Memory Flush (optional)
+# Add to your ~/.openclaw/openclaw.json:
+
+{
+  "memoryFlush": {
+    "enabled": true,
+    "prompt": "...\n\nIf ACTIVE-PROJECT.md has a project: Update PROJECT.md with session progress. Write SESSION-STATE.md with recovery context."
+  }
+}
+
+# 4. Restart gateway
+openclaw gateway restart
+```
+
+---
+
+## Related Projects
+
+- **[openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode)** — Project management with Kanban dashboard (uses memory system for session persistence)
+- **[openclaw-skills](https://github.com/rasimme/openclaw-skills)** — Collection of OpenClaw skills and plugins
+
+---
 
 ## The Challenge
 
@@ -23,7 +70,9 @@ But over time, a pattern emerges:
 - **Unmaintained long-term memory**: MEMORY.md either doesn't exist or becomes stale
 - **Lost context between sessions**: Important decisions from weeks ago fade into forgotten daily files
 
-This project provides three extensions that help OpenClaw manage itself better.
+This system provides three extensions that help OpenClaw manage itself better.
+
+---
 
 ## Architecture
 
@@ -45,132 +94,191 @@ Layer 3: Archive (on-demand)
 └─ Old daily files remain as searchable archive
 ```
 
-No day is lost: Days 1-2 are in short-term, Day 3 gets processed by the maintainer before falling out of the short-term window.
+**No day is lost**: Days 1-2 are in short-term, Day 3 gets processed by the maintainer before falling out of the short-term window.
+
+---
 
 ## Components
 
-### 1. Session Handoff (Hook)
+### 1. Session Handoff Hook
 
-Bridges the gap between sessions. When you run `/new` or context gets compacted, the active task context is summarized and saved to SESSION-STATE.md. The next session picks it up automatically.
+**Hook:** `hooks/session-handoff/session-handoff.mjs`
 
-**What it does:**
-- `command:new` → LLM summarizes current session → saves SESSION-STATE.md
-- `agent:bootstrap` → injects SESSION-STATE.md into new session context
-- Memory flush → updates SESSION-STATE.md before compaction
-
-See [hooks/session-handoff/](hooks/session-handoff/) for setup instructions.
-
-### 2. Memory Maintainer (Cron Job)
-
-Automated curation of MEMORY.md. Runs every 3 days, reads recent daily files, extracts lasting knowledge, and removes outdated entries.
+Preserves active task context when you start a new session (`/new` command or session compaction).
 
 **What it does:**
-- Reads daily files from the last 3 days
-- Updates MEMORY.md with new long-term facts (people, preferences, projects, decisions)
-- Removes completed projects, outdated info, redundant entries
-- Checks workspace file sizes and warns if limits are exceeded
-- Keeps MEMORY.md under 10KB
+- Runs on `/new` command
+- Writes `SESSION-STATE.md` with current task context
+- Agent reads SESSION-STATE.md on next session start
+- Restores context seamlessly
+
+**Integration with Project Mode:**
+If you use [openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode), the hook writes project-aware context (active tasks, decisions, next steps).
+
+---
+
+### 2. Memory Flush Integration
+
+**Config:** `memoryFlush.prompt` in `openclaw.json`
+
+OpenClaw runs memory flush **before compaction** to prevent context loss. This system extends it with project-aware state persistence.
+
+**Extended Memory Flush Prompt:**
+
+```
+Write to today's daily memory file (memory/YYYY-MM-DD.md):
+
+1. **Key facts** about today (decisions, new info, people, preferences)
+2. **Unfinished tasks** (1-2 sentences each, no copy-paste from workspace files)
+3. **Important context** that should survive compaction
+
+READ ACTIVE-PROJECT.md. If a project is active:
+4. Update PROJECT.md with session progress
+5. Write SESSION-STATE.md with recovery context (Read PROJECT-RULES.md + PROJECT.md on restart)
+
+Then: NO_REPLY
+```
+
+This ensures both general memory AND project context survive compaction.
+
+---
+
+### 3. Memory Maintainer (Cron)
+
+**Cron Job:** Runs every 3 days at 03:00
+
+**What it does:**
+1. Reads the last 3 days of daily memory files
+2. Extracts important long-term facts
+3. Updates MEMORY.md (removes stale entries, adds new relevant info)
+4. Keeps MEMORY.md under 10KB (soft limit)
 
 **What belongs in MEMORY.md:**
-- Facts about the user (preferences, people, interests)
-- Active projects and their status
-- Architecture decisions
-- Relationships and people
+- ✅ New facts about the user (preferences, relationships, interests)
+- ✅ New projects or status changes
+- ✅ Important architecture decisions
+- ✅ Changed habits or workflows
 
-**What stays in daily files:**
-- Debugging sessions
-- One-off completed tasks
-- Setup instructions
-- Step-by-step logs
+**What does NOT belong:**
+- ❌ Debugging sessions
+- ❌ One-time tasks that are done
+- ❌ Step-by-step logs
+- ❌ Setup instructions (stay in daily files, findable via memory_search)
 
-See [cron/memory-maintainer/](cron/memory-maintainer/) for the full prompt and setup.
+---
 
-### 3. Workspace Housekeeping (Skill)
+### 4. Workspace Housekeeping (Skill)
 
-A skill containing the knowledge about what belongs where. Loaded only when cleanup is needed — zero token overhead in daily use.
+**Skill:** `workspace-housekeeping`
 
-**Recommended file size limits:**
+Monitors workspace file sizes and provides cleanup guidance.
 
-| File | Purpose | Max Size |
-|------|---------|----------|
-| AGENTS.md | How the agent works (rules, behavior) | 4KB |
-| SOUL.md | Who the agent is (core personality) | 2KB |
-| USER.md | Who the user is (basics) | 1KB |
-| IDENTITY.md | Quick profile card | 0.5KB |
-| TOOLS.md | What tools are available | 3KB |
-| MEMORY.md | What the agent knows (long-term) | 10KB |
-| HEARTBEAT.md | Periodic task checklist | 1KB |
+**Limits:**
+- AGENTS.md: 4KB
+- SOUL.md: 2KB
+- TOOLS.md: 3KB
+- MEMORY.md: 10KB
 
-**The golden rule:** If information doesn't belong in a file, move it to where it does:
-- Technical details → TOOLS.md or respective skill
-- Project info → MEMORY.md
-- Personality → SOUL.md
-- Hardware configs → respective skill
-- Daily events → daily memory files
+**When a file exceeds its limit:**
+- Agent sends Telegram/Discord warning
+- Loads workspace-housekeeping skill
+- Provides cleanup guide with:
+  - Language policy (English for instructions, German for personality)
+  - Protected sections (what to keep)
+  - What can be refactored or removed
 
-See [skills/workspace-housekeeping/](skills/workspace-housekeeping/) for the full skill.
-
-## The Self-Maintaining Loop
-
+**Manual usage:**
 ```
-Daily: Memory flush saves context before compaction (native OpenClaw)
-  ↓
-Every 3 days: Memory maintainer curates MEMORY.md + checks file sizes
-  ↓
-When needed: File size warning → load housekeeping skill → review → clean up
+Agent, load the workspace-housekeeping skill and help me clean up AGENTS.md
 ```
 
-The user stays in control: the maintainer curates autonomously, but housekeeping changes are always proposed and confirmed before execution.
+---
 
-## Workspace File Guide
+## File Size Limits (Why?)
 
-Quick reference for what belongs where:
+| File | Limit | Reason |
+|------|-------|--------|
+| AGENTS.md | 4KB | Instructions - needs to be fast to parse, concise |
+| SOUL.md | 2KB | Personality - short, memorable, impactful |
+| TOOLS.md | 3KB | Reference - quick lookup, not a tutorial |
+| MEMORY.md | 10KB | Long-term facts - curated, not a diary |
 
-**AGENTS.md** — Operating manual. Rules, safety, workflows. NOT project details, NOT tool configs. **Write in English** (better instruction adherence).
+**Exceeding limits causes:**
+- Slower session starts (more tokens to process)
+- Instruction drift (agent skims instead of reading carefully)
+- Higher costs (every session loads these files)
+- Reduced effectiveness (signal-to-noise ratio drops)
 
-**SOUL.md** — Core personality. Character traits, values, boundaries. NOT behavior rules, NOT communication tips. **Write in your native language** (personality lives in its language).
+---
 
-**TOOLS.md** — Quick reference for available tools. Short commands, NOT detailed hardware configs (those go in skills). **Write in English.**
+## Usage Patterns
 
-**MEMORY.md** — Curated long-term knowledge. People, preferences, projects, decisions. NOT daily logs, NOT debugging details. **Write in your native language.**
+### Daily Work (Automatic)
 
-### Language Policy
+- Work normally
+- Session Handoff preserves context on `/new`
+- Memory Flush saves to daily file before compaction
+- **You do nothing!**
 
-Models follow English instructions ~20-30% better than non-English. Recommendation:
-- **English:** AGENTS.md, TOOLS.md (instructions the model must follow)
-- **Native language:** SOUL.md, USER.md, IDENTITY.md, MEMORY.md (personality and context)
-- **Agent replies:** In the user's language (configured in SOUL.md or AGENTS.md)
+### Every 3 Days (Automatic)
 
-### Protected Sections
+- Memory Maintainer runs at 03:00
+- Reads last 3 days of memory
+- Updates MEMORY.md
+- **You do nothing!**
 
-The housekeeping skill defines which sections in AGENTS.md are **locked** (never remove) vs **adjustable** (can be refined). This prevents cleanup from accidentally removing critical rules like safety policies or response style guidelines. See the [housekeeping skill](skills/workspace-housekeeping/SKILL.md) for details.
+### When Warned (Manual)
 
-## Setup
+- Agent warns: "⚠️ AGENTS.md is 5KB (limit: 4KB)"
+- You say: "Load workspace-housekeeping and help me clean up"
+- Agent provides structured cleanup guidance
+- You review and apply changes
 
-1. Copy `hooks/session-handoff/` to `~/.openclaw/hooks/`
-2. Copy `skills/workspace-housekeeping/` to your workspace `skills/` directory
-3. Enable the hook in your OpenClaw config (see hook README)
-4. Set up the memory-maintainer cron job (see cron README)
-5. Create your MEMORY.md if it doesn't exist
-6. Add a housekeeping reference to your AGENTS.md
+---
+
+## Integration with Project Mode
+
+If you use [openclaw-project-mode](https://github.com/rasimme/openclaw-project-mode), this system enhances it:
+
+**Session Handoff:**
+- Writes PROJECT.md updates before `/new`
+- Writes SESSION-STATE.md with project recovery context
+
+**Memory Flush:**
+- Updates PROJECT.md before compaction
+- Writes SESSION-STATE.md reminder to reload project
+
+**Memory Maintainer:**
+- Extracts project milestones into MEMORY.md
+- Removes completed project references when project is archived
+
+**Together:** Project context survives sessions, compaction, and gateway restarts.
+
+---
 
 ## Changelog
 
-### v1.1.0 (2026-02-09)
-- Housekeeping skill rewritten in English (better model instruction adherence)
-- Added language policy: English for instruction files, native language for personality/context
-- Added protected vs adjustable sections (prevents accidental deletion of critical rules)
-- Added response style guidance (brevity rules to reduce token usage)
-- Memory maintainer now references housekeeping skill in warnings
-- Cron warning message updated with skill load hint
+### v1.1.0 (2026-02-14)
+- Memory Flush integration documented
+- SESSION-STATE.md format standardized
+- Project-aware memory persistence
 
-### v1.0.0 (2026-02-08)
+### v1.0.0 (2026-02-09)
 - Initial release
-- 3-layer memory model (short-term → long-term → archive)
-- Memory maintainer cron job (every 3 days, automated MEMORY.md curation)
-- Workspace housekeeping skill with file size monitoring
-- Session handoff hook (renamed from simme-memory v3.1.0)
-- Workspace file guide (AGENTS.md, SOUL.md, TOOLS.md, MEMORY.md sizing and content rules)
+- Session Handoff Hook
+- Memory Maintainer Cron
+- Workspace Housekeeping Skill
+
+---
+
+## Philosophy
+
+- 🎯 **Simplicity** — Extend OpenClaw's existing memory primitives, don't replace them
+- 💰 **Low cost** — Haiku for cron jobs, minimal token overhead
+- 🔒 **Privacy** — Everything runs locally via your Gateway
+- ⚡ **Automatic** — Self-maintaining where possible, human-in-the-loop where it matters
+
+---
 
 ## License
 
