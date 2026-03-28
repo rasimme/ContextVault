@@ -1,8 +1,31 @@
 # Memory Maintainer — Cron Job Prompt
 
-Use this as the `payload.message` in your cron job configuration. Adjust language, file paths, and messaging channel to your setup.
+Template for automated MEMORY.md curation. Create one cron job per agent workspace.
+
+## Setup
+
+Each agent with its own workspace needs a separate cron job:
+
+```bash
+# Example: Create via OpenClaw cron tool or CLI
+# Adjust: agentId, workspace path, notification target, file size limits
+```
+
+### Multi-Agent Example
+
+| Agent | Schedule | Workspace |
+|-------|----------|-----------|
+| main | `0 3 */3 * *` | `~/.openclaw/workspace/` |
+| design-agent | `0 3 1,4,7,10,13,16,19,22,25,28 * *` | `~/.openclaw/workspace-design/` |
+| dev-agent | `0 3 2,5,8,11,14,17,20,23,26,29 * *` | `~/.openclaw/workspace-dev/` |
+
+Stagger schedules so agents don't run simultaneously.
 
 ---
+
+## Prompt Template
+
+Use this as `payload.message` in your cron job. Replace `{AGENT_NAME}`, `{NOTIFY_CHANNEL}`, `{NOTIFY_TARGET}`, and adjust file size limits per workspace.
 
 ```
 You are the Memory Maintainer.
@@ -49,11 +72,35 @@ Warn thresholds:
 - TOOLS.md: warn if >3KB
 - MEMORY.md: warn if >10KB
 
-If ANY file exceeds its limit: Send a warning via message tool:
-"⚠️ Workspace Housekeeping: [FILE] has grown to [SIZE] (limit: [LIMIT]). Review recommended."
+If ANY file exceeds its limit:
+Send a warning via message tool (channel: {NOTIFY_CHANNEL}, to: {NOTIFY_TARGET}):
+"⚠️ Workspace Housekeeping ({AGENT_NAME}): [FILE] has grown to [SIZE] (limit: [LIMIT]). Review recommended."
 
 If all files are under their limits: Do not send a message.
 
 ## Output
 Brief summary of what you changed in MEMORY.md (max 3 lines). If no changes: just confirm.
 ```
+
+---
+
+## Recommended Cron Settings
+
+```json
+{
+  "name": "memory-maintainer",
+  "schedule": { "kind": "cron", "expr": "0 3 */3 * *", "tz": "Europe/Amsterdam" },
+  "sessionTarget": "isolated",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "... (prompt above with placeholders filled) ...",
+    "timeoutSeconds": 180,
+    "lightContext": true
+  },
+  "delivery": { "mode": "none" }
+}
+```
+
+- `lightContext: true` — reduces token overhead (cron doesn't need full conversation history)
+- `delivery: none` — silent unless file size warning triggers
+- `timeoutSeconds: 180` — 3 min is plenty for memory curation
